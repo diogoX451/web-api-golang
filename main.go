@@ -46,6 +46,10 @@ func main() {
 
 func getStudent(s *gin.Context) {
 	var student []Student
-	db.Raw("SELECT * FROM product").Scan(&student)
+	err := db.Raw("SELECT * FROM product").Scan(&student).Error
+	if err != nil {
+		s.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 	s.IndentedJSON(http.StatusOK, student)
 }
