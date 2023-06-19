@@ -17,8 +17,6 @@ type Student struct {
 	NAME string `json:"name"`
 }
 
-var student []Student
-
 var err error
 var db *gorm.DB
 
@@ -28,22 +26,27 @@ func init() {
 		panic("No .env variable")
 	}
 
+	connectDB()
+
+}
+
+func connectDB() {
 	db, err = gorm.Open(postgres.Open(os.Getenv("DB_DNS")), &gorm.Config{})
 
 	if err != nil {
 		panic(err)
 	}
-
 }
 
 func main() {
 
-	db.Raw("SELECT * FROM student").Scan(&student)
 	router := gin.Default()
 	router.GET("/student", getStudent)
 	router.Run("localhost:3000")
 }
 
 func getStudent(s *gin.Context) {
+	var student []Student
+	db.Raw("SELECT * FROM product").Scan(&student)
 	s.IndentedJSON(http.StatusOK, student)
 }
