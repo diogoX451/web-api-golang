@@ -39,7 +39,6 @@ func connectDB() {
 }
 
 func main() {
-
 	router := gin.Default()
 	router.GET("/student", getStudent)
 	router.Run("localhost:3000")
